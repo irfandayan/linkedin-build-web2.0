@@ -83,12 +83,12 @@ const Header = (props) => {
 };
 
 const Container = styled.div`
+  position: fixed;
+  left: 0;
+  top: 0;
   background-color: white;
   border-bottom: 1px solid rgba(0, 0, 0, 0.08);
-  left: 0;
   padding: 0 24px;
-  position: fixed;
-  top: 0;
   width: 100vw;
   z-index: 100;
 `;
