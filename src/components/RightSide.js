@@ -59,8 +59,8 @@ const FollowCard = styled.div`
   border-radius: 5px;
   position: relative;
   border: none;
-  box-shadow: 0 0 0 1px rgb(0, 0, 0 /15%), 0, 0, 0 rgb(0, 0, 0 / 20%);
-  paddding: 12px;
+  box-shadow: 0 0 0 1px rgb(0 0 0 / 15%), 0 0 0 rgb(0 0 0 / 20%);
+  padding: 12px;
 `;
 
 const Title = styled.div`

@@ -1,9 +1,9 @@
 import { Routes, Route, Link } from "react-router-dom";
 import "./App.css";
 
+import Login from "./components/Login";
 import Header from "./components/Header";
 import Home from "./components/Home";
-import Login from "./components/Login";
 
 const App = () => {
   return (
