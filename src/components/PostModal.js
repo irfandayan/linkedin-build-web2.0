@@ -1,11 +1,35 @@
 import styled from "styled-components";
 import React from "react";
 import { useState } from "react";
+import ReactPlayer from "react-player";
 
 const PostModal = (props) => {
   const [editorText, setEditorText] = useState("");
+  const [shareImage, setShareImage] = useState("");
+  const [videoLink, setVideolink] = useState("");
+  const [assetArea, setAssetArea] = useState("");
+
+  const handleChange = (e) => {
+    const image = e.target.files[0];
+
+    if (image === "" || image === undefined) {
+      alert(`not an image, the file is a ${typeof image}`);
+      return;
+    }
+    setShareImage(image);
+  };
+
+  const switchAssetArea = (area) => {
+    setShareImage("");
+    setVideolink("");
+    setAssetArea(area);
+  };
+
   const reset = (e) => {
     setEditorText("");
+    setShareImage("");
+    setVideolink("");
+    setAssetArea("");
     props.handleClick(e);
   };
 
@@ -32,16 +56,49 @@ const PostModal = (props) => {
                   onChange={(e) => setEditorText(e.target.value)}
                   placeholder="What do you want to talk about?"
                   autoFocus={true}
-                ></textarea>
+                />
+
+                {assetArea === "image" ? (
+                  <UploadImage>
+                    <input
+                      type="file"
+                      accept="image/gif,image/jpeg, image/png"
+                      name="image"
+                      id="file"
+                      style={{ display: "none" }}
+                      onChange={handleChange}
+                    />
+                    <p>
+                      <label htmlFor="file">Select an image to share</label>
+                    </p>
+                    {shareImage && (
+                      <img src={URL.createObjectURL(shareImage)} alt="" />
+                    )}
+                  </UploadImage>
+                ) : (
+                  assetArea === "media" && (
+                    <>
+                      <input
+                        type="text"
+                        placeholder="Please input a video link"
+                        value={videoLink}
+                        onChange={(e) => setVideolink(e.target.value)}
+                      />
+                      {videoLink && (
+                        <ReactPlayer width={"100%"} url={videoLink} />
+                      )}
+                    </>
+                  )
+                )}
               </Editor>
             </SharedContent>
 
             <ShareCreation>
               <AttachAssets>
-                <AssetButton>
+                <AssetButton onClick={() => switchAssetArea("image")}>
                   <img src="/images/share-image.svg" alt="" />
                 </AssetButton>
-                <AssetButton>
+                <AssetButton onClick={() => switchAssetArea("media")}>
                   <img src="/images/share-video.svg" alt="" />
                 </AssetButton>
               </AttachAssets>
@@ -53,7 +110,9 @@ const PostModal = (props) => {
                 </AssetButton>
               </ShareComment>
 
-              <PostButton>Post</PostButton>
+              <PostButton disabled={!editorText ? true : false}>
+                Post
+              </PostButton>
             </ShareCreation>
           </Content>
         </Container>
@@ -71,6 +130,7 @@ const Container = styled.div`
   z-index: 9999;
   color: black;
   background-color: rgba(0, 0, 0, 0.8);
+  animation: fadeIn 0.3s;
 `;
 const Content = styled.div`
   width: 100%;
@@ -177,10 +237,10 @@ const PostButton = styled.button`
   border-radius: 20px;
   padding-left: 16px;
   padding-right: 16px;
-  background: #0a66c2;
-  color: white;
+  background: ${(props) => (props.disabled ? "rgba(0,0,0,0.8)" : "#0a66c2")};
+  color: ${(props) => (props.disabled ? "rgba(0,0,0,0.2)" : "#fff")};
   &:hover {
-    background: #004182;
+    background: ${(props) => (props.disabled ? "rgba(0,0,0,0.08)" : "#004182")};
   }
 `;
 const Editor = styled.div`
@@ -195,6 +255,13 @@ const Editor = styled.div`
     height: 35px;
     font-size: 16px;
     margin-bottom: 20px;
+  }
+`;
+
+const UploadImage = styled.div`
+  text-align: center;
+  img {
+    width: 100%;
   }
 `;
 
