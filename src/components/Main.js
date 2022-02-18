@@ -15,14 +15,15 @@ const Main = (props) => {
     switch (showModal) {
       case "open":
         setShowModal("close");
+
         break;
       case "close":
         setShowModal("open");
+
         break;
       default:
         setShowModal("close");
     }
-    console.log(showModal);
   };
 
   return (

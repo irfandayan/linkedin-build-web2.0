@@ -4,11 +4,7 @@ import { useState } from "react";
 
 const PostModal = (props) => {
   const [editorText, setEditorText] = useState("");
-
-  console.log("modal is " + props.showModal);
-
   const reset = (e) => {
-    console.log("i was here");
     setEditorText("");
     props.handleClick(e);
   };
@@ -108,7 +104,7 @@ const Header = styled.div`
     color: rgba(0, 0, 0, 0.15);
     svg,
     img {
-      point-events: none;
+      pointer-events: none;
     }
   }
 `;
