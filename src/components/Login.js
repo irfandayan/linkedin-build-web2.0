@@ -2,10 +2,18 @@ import React from "react";
 import styled from "styled-components";
 import { connect } from "react-redux";
 import { singInAPI } from "../actions";
+import { useNavigate } from "react-router-dom";
 
 const Login = (props) => {
+  const singInHandler = () => {
+    return props.signIn();
+  };
+
+  let navigate = useNavigate();
+
   return (
     <Container>
+      {props.user && navigate("/home")}
       <Nav>
         <a href="/">
           <img src="/images/login-logo.svg" alt="" />
@@ -21,7 +29,8 @@ const Login = (props) => {
           <img src="/images/login-hero.svg" alt="" />
         </Hero>
         <Form>
-          <Google onClick={() => props.signIn()}>
+          {/* <Google onClick={() => props.signIn()}> */}
+          <Google onClick={singInHandler}>
             <img src="/images/google.svg" alt="" />
             Sing in with Google
           </Google>
@@ -166,7 +175,9 @@ const Google = styled.button`
 `;
 
 const mapStateToProps = (state) => {
-  return {};
+  return {
+    user: state.userState.user,
+  };
 };
 
 const mapDispatchToProps = (dispatch) => ({
