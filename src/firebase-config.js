@@ -6,9 +6,13 @@ import {
   onAuthStateChanged,
   signOut,
 } from "firebase/auth";
-
+import {
+  getStorage,
+  ref,
+  uploadBytes,
+  uploadBytesResumable,
+} from "firebase/storage";
 import { getFirestore } from "firebase/firestore/lite";
-import { getStorage } from "firebase/storage";
 
 // Your web app's Firebase configuration
 const firebaseConfig = {
@@ -27,7 +31,9 @@ const auth = getAuth();
 const provider = new GoogleAuthProvider();
 
 const db = getFirestore(firebaseApp);
+
 const storage = getStorage(firebaseApp);
+// const storageRef = ref(storage, "images");
 
 export {
   auth,
@@ -36,5 +42,8 @@ export {
   onAuthStateChanged,
   signOut,
   storage,
+  ref,
+  uploadBytes,
+  uploadBytesResumable,
 };
 export default db;

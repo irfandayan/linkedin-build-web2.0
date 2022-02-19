@@ -4,6 +4,10 @@ import {
   signInWithPopup,
   onAuthStateChanged,
   signOut,
+  storage,
+  ref,
+  uploadBytes,
+  uploadBytesResumable,
 } from "../firebase-config";
 import { SET_USER } from "./actionType";
 
@@ -42,5 +46,17 @@ export function signOutAPI() {
       .catch((error) => {
         console.log(error.message);
       });
+  };
+}
+
+export function postArticleAPI(payload) {
+  console.log("i was here");
+  return (dispatch) => {
+    if (payload.image != "") {
+      const storageRef = ref(storage, `images/${payload.image.name}`);
+      uploadBytesResumable(storageRef, payload.image).then((snapshot) => {
+        console.log("Uploaded a file");
+      });
+    }
   };
 }
