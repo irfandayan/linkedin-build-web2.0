@@ -9,7 +9,12 @@ import {
   uploadBytes,
   uploadBytesResumable,
   getDownloadURL,
+  collection,
+  addDoc,
 } from "../firebase-config";
+
+import db from "../firebase-config";
+
 import { SET_USER } from "./actionType";
 
 export const setUser = (payload) => ({
@@ -52,6 +57,7 @@ export function signOutAPI() {
 
 export function postArticleAPI(payload) {
   console.log("i was here");
+  console.log(payload.timestamp);
   return (dispatch) => {
     if (payload.image != "") {
       // Create referece
@@ -90,12 +96,33 @@ export function postArticleAPI(payload) {
         (error) => {
           // Handle unsuccessful uploads
         },
-        () => {
+        async () => {
           // Handle successful uploads on complete
           // For instance, get the download URL: https://firebasestorage.googleapis.com/...
-          getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
-            console.log("File available at", downloadURL);
+          const rdl = await getDownloadURL(uploadTask.snapshot.ref).then(
+            (downloadURL) => {
+              console.log("File available at", downloadURL);
+              // Add download URL to payload
+              payload.downloadURL = downloadURL;
+            }
+          );
+
+          console.log("RDL object: " + rdl);
+
+          // Add a new document with a generated id.
+          const docRef = await addDoc(collection(db, "articles"), {
+            actor: {
+              description: payload.user.email,
+              title: payload.user.displayName,
+              date: payload.timestamp,
+              image: payload.user.photoURL,
+            },
+            video: payload.video,
+            sharedImg: payload.downloadURL,
+            comments: 0,
+            description: payload.description,
           });
+          console.log("Document written with ID: ", docRef.id);
         }
       );
     }

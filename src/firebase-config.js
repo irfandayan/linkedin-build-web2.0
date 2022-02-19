@@ -13,7 +13,11 @@ import {
   uploadBytesResumable,
   getDownloadURL,
 } from "firebase/storage";
-import { getFirestore } from "firebase/firestore/lite";
+// import { getFirestore } from "firebase/firestore/lite";
+
+import { getFirestore } from "firebase/firestore";
+
+import { collection, addDoc } from "firebase/firestore";
 
 // Your web app's Firebase configuration
 const firebaseConfig = {
@@ -47,5 +51,7 @@ export {
   uploadBytes,
   uploadBytesResumable,
   getDownloadURL,
+  collection,
+  addDoc,
 };
 export default db;

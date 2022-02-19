@@ -5,6 +5,7 @@ import ReactPlayer from "react-player";
 import { connect } from "react-redux";
 
 import { postArticleAPI } from "../actions";
+import { Timestamp } from "firebase/firestore";
 
 const PostModal = (props) => {
   const [editorText, setEditorText] = useState("");
@@ -39,6 +40,7 @@ const PostModal = (props) => {
       video: videoLink,
       user: props.user,
       description: editorText,
+      timestamp: Timestamp.now(),
     };
 
     props.postArticle(payload);
