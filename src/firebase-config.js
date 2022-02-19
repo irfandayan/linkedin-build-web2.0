@@ -11,6 +11,7 @@ import {
   ref,
   uploadBytes,
   uploadBytesResumable,
+  getDownloadURL,
 } from "firebase/storage";
 import { getFirestore } from "firebase/firestore/lite";
 
@@ -45,5 +46,6 @@ export {
   ref,
   uploadBytes,
   uploadBytesResumable,
+  getDownloadURL,
 };
 export default db;
