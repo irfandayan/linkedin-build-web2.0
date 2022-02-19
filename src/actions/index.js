@@ -45,7 +45,7 @@ export function signOutAPI() {
 }
 
 export function postArticleAPI(payload) {
-  return async (dispatch) => {
+  return (dispatch) => {
     if (payload.image != "") {
       // Create referece
       const storageRef = ref(storage, `images/${payload.image.name}`);
@@ -103,21 +103,23 @@ export function postArticleAPI(payload) {
         }
       );
     } else if (payload.video) {
-      // Add a new document with a generated id.
-      console.log("Busy in video upload");
-      const docRef = await addDoc(collection(db, "articles"), {
-        actor: {
-          description: payload.user.email,
-          title: payload.user.displayName,
-          date: payload.timestamp,
-          image: payload.user.photoURL,
-        },
-        video: payload.video,
-        sharedImg: "",
-        comments: 0,
-        description: payload.description,
-      });
-      console.log("Video added with ID: ", docRef.id);
+      (async () => {
+        // Add a new document with a generated id.
+        console.log("Busy in video upload");
+        const docRef = await addDoc(collection(db, "articles"), {
+          actor: {
+            description: payload.user.email,
+            title: payload.user.displayName,
+            date: payload.timestamp,
+            image: payload.user.photoURL,
+          },
+          video: payload.video,
+          sharedImg: "",
+          comments: 0,
+          description: payload.description,
+        });
+        console.log("Video added with ID: ", docRef.id);
+      })();
     }
   };
 }
