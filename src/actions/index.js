@@ -45,19 +45,10 @@ export function signOutAPI() {
 }
 
 export function postArticleAPI(payload) {
-  console.log("i was here");
-  console.log(payload.timestamp);
-  return (dispatch) => {
+  return async (dispatch) => {
     if (payload.image != "") {
       // Create referece
       const storageRef = ref(storage, `images/${payload.image.name}`);
-
-      // Upload the file
-      // const uploadTask = uploadBytesResumable(storageRef, payload.image).then(
-      //   (snapshot) => {
-      //     console.log("Uploaded a file");
-      //   }
-      // );
 
       const uploadTask = uploadBytesResumable(storageRef, payload.image);
 
@@ -88,13 +79,12 @@ export function postArticleAPI(payload) {
         async () => {
           // Handle successful uploads on complete
           // For instance, get the download URL: https://firebasestorage.googleapis.com/...
-          const rdl = await getDownloadURL(uploadTask.snapshot.ref).then(
-            (downloadURL) => {
-              console.log("File available at", downloadURL);
-              // Add download URL to payload
-              payload.downloadURL = downloadURL;
-            }
-          );
+          await getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
+            console.log("File available at", downloadURL);
+
+            // Add download URL to payload
+            payload.downloadURL = downloadURL;
+          });
 
           // Add a new document with a generated id.
           const docRef = await addDoc(collection(db, "articles"), {
@@ -112,6 +102,22 @@ export function postArticleAPI(payload) {
           console.log("Document written with ID: ", docRef.id);
         }
       );
+    } else if (payload.video) {
+      // Add a new document with a generated id.
+      console.log("Busy in video upload");
+      const docRef = await addDoc(collection(db, "articles"), {
+        actor: {
+          description: payload.user.email,
+          title: payload.user.displayName,
+          date: payload.timestamp,
+          image: payload.user.photoURL,
+        },
+        video: payload.video,
+        sharedImg: "",
+        comments: 0,
+        description: payload.description,
+      });
+      console.log("Video added with ID: ", docRef.id);
     }
   };
 }
