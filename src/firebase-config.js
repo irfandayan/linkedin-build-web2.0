@@ -1,19 +1,6 @@
 import { initializeApp } from "firebase/app";
-import {
-  getAuth,
-  signInWithPopup,
-  GoogleAuthProvider,
-  onAuthStateChanged,
-  signOut,
-} from "firebase/auth";
-import {
-  getStorage,
-  ref,
-  uploadBytes,
-  uploadBytesResumable,
-  getDownloadURL,
-} from "firebase/storage";
-// import { getFirestore } from "firebase/firestore/lite";
+import { getAuth, GoogleAuthProvider } from "firebase/auth";
+import { getStorage } from "firebase/storage";
 
 import { getFirestore } from "firebase/firestore";
 
@@ -32,26 +19,15 @@ const firebaseConfig = {
 // Initialize Firebase
 const firebaseApp = initializeApp(firebaseConfig);
 
+// Authentication
 const auth = getAuth();
 const provider = new GoogleAuthProvider();
 
+// Firestore Database
 const db = getFirestore(firebaseApp);
 
+// Storage
 const storage = getStorage(firebaseApp);
-// const storageRef = ref(storage, "images");
 
-export {
-  auth,
-  provider,
-  signInWithPopup,
-  onAuthStateChanged,
-  signOut,
-  storage,
-  ref,
-  uploadBytes,
-  uploadBytesResumable,
-  getDownloadURL,
-  collection,
-  addDoc,
-};
+export { auth, provider, storage };
 export default db;

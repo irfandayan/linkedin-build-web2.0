@@ -1,19 +1,8 @@
-import {
-  auth,
-  provider,
-  signInWithPopup,
-  onAuthStateChanged,
-  signOut,
-  storage,
-  ref,
-  uploadBytes,
-  uploadBytesResumable,
-  getDownloadURL,
-  collection,
-  addDoc,
-} from "../firebase-config";
+import db, { auth, provider, storage } from "../firebase-config";
 
-import db from "../firebase-config";
+import { signInWithPopup, onAuthStateChanged, signOut } from "firebase/auth";
+import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
+import { collection, addDoc } from "firebase/firestore";
 
 import { SET_USER } from "./actionType";
 
@@ -106,8 +95,6 @@ export function postArticleAPI(payload) {
               payload.downloadURL = downloadURL;
             }
           );
-
-          console.log("RDL object: " + rdl);
 
           // Add a new document with a generated id.
           const docRef = await addDoc(collection(db, "articles"), {
