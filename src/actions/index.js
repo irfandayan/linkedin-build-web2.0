@@ -2,9 +2,9 @@ import db, { auth, provider, storage } from "../firebase-config";
 
 import { signInWithPopup, onAuthStateChanged, signOut } from "firebase/auth";
 import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
-import { collection, addDoc } from "firebase/firestore";
+import { collection, addDoc, getDocs } from "firebase/firestore";
 
-import { SET_USER, SET_LOADING_STATUS } from "./actionType";
+import { SET_USER, SET_LOADING_STATUS, GET_ARTICLES } from "./actionType";
 
 export const setUser = (payload) => ({
   type: SET_USER,
@@ -14,6 +14,11 @@ export const setUser = (payload) => ({
 export const setLoading = (status) => ({
   type: SET_LOADING_STATUS,
   status: status,
+});
+
+export const getArticles = (payload) => ({
+  type: GET_ARTICLES,
+  payload: payload,
 });
 
 export function singInAPI() {
@@ -49,6 +54,7 @@ export function signOutAPI() {
   };
 }
 
+// Post articles document
 export function postArticleAPI(payload) {
   return (dispatch) => {
     dispatch(setLoading(true));
@@ -114,7 +120,7 @@ export function postArticleAPI(payload) {
     } else if (payload.video) {
       (async () => {
         // Add a new document with a generated id.
-        console.log("Busy in video upload");
+
         const docRef = await addDoc(collection(db, "articles"), {
           actor: {
             description: payload.user.email,
@@ -131,5 +137,21 @@ export function postArticleAPI(payload) {
         console.log("Video added with ID: ", docRef.id);
       })();
     }
+  };
+}
+// Get articles documents
+export function getArticlesAPI() {
+  return async (dispatch) => {
+    let payload;
+
+    const querySnapshot = await getDocs(collection(db, "articles"));
+    // querySnapshot.forEach((doc) => {
+    //   // doc.data() is never undefined for query doc snapshots
+    //   console.log(doc.id, " => ", doc.data());
+    // });
+
+    payload = querySnapshot.docs.map((doc) => doc.data());
+    // console.log(payload);
+    dispatch(getArticles(payload));
   };
 }
