@@ -4,11 +4,16 @@ import { signInWithPopup, onAuthStateChanged, signOut } from "firebase/auth";
 import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
 import { collection, addDoc } from "firebase/firestore";
 
-import { SET_USER } from "./actionType";
+import { SET_USER, SET_LOADING_STATUS } from "./actionType";
 
 export const setUser = (payload) => ({
   type: SET_USER,
   user: payload,
+});
+
+export const setLoading = (status) => ({
+  type: SET_LOADING_STATUS,
+  status: status,
 });
 
 export function singInAPI() {
@@ -46,6 +51,8 @@ export function signOutAPI() {
 
 export function postArticleAPI(payload) {
   return (dispatch) => {
+    dispatch(setLoading(true));
+
     if (payload.image != "") {
       // Create referece
       const storageRef = ref(storage, `images/${payload.image.name}`);
@@ -99,6 +106,8 @@ export function postArticleAPI(payload) {
             comments: 0,
             description: payload.description,
           });
+          dispatch(setLoading(false));
+
           console.log("Document written with ID: ", docRef.id);
         }
       );
@@ -118,6 +127,7 @@ export function postArticleAPI(payload) {
           comments: 0,
           description: payload.description,
         });
+        dispatch(setLoading(false));
         console.log("Video added with ID: ", docRef.id);
       })();
     }
