@@ -12,7 +12,7 @@ const Main = (props) => {
 
   useEffect(() => {
     props.getArticlesAPI();
-  }, []);
+  }, [props.loading]);
 
   const handleClick = (e) => {
     e.preventDefault();
