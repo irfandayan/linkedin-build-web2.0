@@ -3,7 +3,7 @@
 <h2>Tech:</h2>
   <ul>
     <li>React.js</li>
-  <li>Ract Router</li>
+  <li>React Router</li>
     <li>Redux + Thunk</li>
     <li>Firebase SDKs</li>
     <li>Styled Components</li>
